@@ -1,6 +1,9 @@
+date: 2026-07-16
+destination: Itália
+
 # O David de Michelangelo ressignificou o que eu entendia sobre dedicação
 
-![Uma das obras dos prisioneiros que me impressionou](https://github.com/Wilkner/gemeo-digital-viagem/blob/main/app/static/images/prisioneiro-04.jpg?raw=true)
+![Uma das obras dos prisioneiros que me impressionou](https://raw.githubusercontent.com/Wilkner/gemeo-digital-viagem/refs/heads/main/app/static/images/prisioneiro-04.jpg)
 
 Saindo da primeira sala da Galleria dell'Accademia e entrando a esquerda e depois direita vemos ele, imponente, enorme, ao final do corredor: David. Antes, no entanto, um busto - que considerei pequeno - do Michelangelo e suas quatro obras inacabadas, chamadas de priosineiros dividem o corredor. Eu soube delas antes da viagem, mas vê-las, uau!, fiquei mais uma vez encantado. Observar os detalhes de todas elas conclui que estavam numa sincronia aparente, quase como um movimento interrompido. Dizem que essas esculturam estão saindo mármore e isso fez total sentido. Também li que Michelangelo dizia: a escultura já está pronta, eu apenas às liberto do mármore. A escultura que mais me marcou foi a que parece uma pessoa estava com o corpo para o lado direito e iniciava o movimento de virar o rosto para frente para encarar e, no mínimo, agradecer o mestre do mármore, seu herói, que a libertava. Eu tirei pouquíssimas fotos dos prisioneiros porque eu olhava para eles e pensava: caramba, o que esse cara disse é verdade: a obra já está pronta, só precisa ser libertada, porque a cada olhada eu concluia que esse mármore foi "feito" para aquilo.
 

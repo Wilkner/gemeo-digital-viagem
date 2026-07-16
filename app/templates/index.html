@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gêmeo Digital de Viagem ✈️ | Wilkner</title>
-    <!-- Renderizador Markdown -->
+    <title>Meus relatos de viagem ✈️ | Wilkner</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {
@@ -33,7 +32,7 @@
             flex-direction: column;
         }
         
-        /* PASSO 1: Boas-vindas */
+        /* Cabeçalho */
         .welcome-header {
             text-align: center;
             margin: 40px 0 20px 0;
@@ -52,7 +51,7 @@
             margin: 0 auto;
         }
 
-        /* PASSO 2: Vitrine de Histórias */
+        /* Vitrine de Histórias */
         .stories-showcase {
             margin-top: 30px;
             animation: fadeIn 0.8s ease;
@@ -68,42 +67,70 @@
         }
         .trips-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 20px;
         }
+        
+        /* Card de Viagem Corrigido */
         .trip-card {
             background: var(--card);
             border: 1px solid #333;
             border-radius: 12px;
-            padding: 25px;
+            overflow: hidden;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            min-height: 120px;
+            height: 100%;
+            min-height: 380px;
         }
         .trip-card:hover {
             transform: translateY(-5px);
             border-color: var(--primary);
             box-shadow: 0 8px 20px rgba(138, 43, 226, 0.2);
         }
+        .trip-card-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+        .trip-card-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-grow: 1;
+        }
         .trip-card h3 {
             margin: 0 0 10px 0;
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             line-height: 1.4;
+            color: var(--text);
         }
-        .trip-card .card-action {
-            color: var(--primary);
+        .trip-card-preview {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin: 0 0 20px 0;
+            line-height: 1.5;
+        }
+        .read-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
             font-weight: bold;
             font-size: 0.9rem;
+            text-align: left;
+            padding: 0;
+            cursor: pointer;
             display: flex;
             align-items: center;
             gap: 5px;
+            margin-top: auto;
         }
 
-        /* PASSO 3: Modal de Escolha de Formato */
+        /* Modal */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -158,7 +185,7 @@
         }
         .format-btn span { font-size: 2rem; }
 
-        /* ÁREA DE VISUALIZAÇÃO DE OUTPUTS (Sempre limpa de inputs) */
+        /* Outputs de Visualização */
         .view-section {
             display: none;
             margin-top: 40px;
@@ -173,7 +200,7 @@
             cursor: pointer;
         }
         
-        /* Renderização dos Stories */
+        /* Stories */
         .stories-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -221,7 +248,7 @@
             font-weight: bold; margin-top: 8px;
         }
 
-        /* Renderização do Artigo */
+        /* Artigo */
         .article-view {
             background: var(--card);
             padding: 40px;
@@ -258,7 +285,7 @@
             margin: 30px auto;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-            }    
+        }    
         .article-body strong { color: #fff; }
 
         .loading { text-align: center; color: var(--accent); display: none; margin-top: 40px; font-weight: bold;}
@@ -267,42 +294,89 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Filtros */
+        .filters-section {
+            margin: 20px 0;
+            padding: 10px 0;
+        }
+        .filter-label {
+            font-weight: 600;
+            margin-right: 10px;
+            color: var(--text-muted);
+        }
+        .filters-container {
+            display: inline-flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            background-color: #262626;
+            color: var(--text-muted);
+            border: 1px solid #444;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        .filter-btn:hover {
+            background-color: #333;
+            border-color: var(--primary);
+        }
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Tags de Metadados nos Cards */
+        .trip-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .meta-tag {
+            background-color: rgba(0, 245, 212, 0.1);
+            color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         
-        <!-- FLUXO PRINCIPAL: Escolha de Histórias -->
         <div id="mainPortal">
             <div class="welcome-header">
-                <h1>Gêmeo Digital de Viagem ✈️</h1>
-                <p>E aí! Eu sou o Gêmeo Digital do <b>Wilkner</b>. Ele viajou pela Europa e eu capturei as memórias e reflexões dele. Escolha uma história abaixo para começar a explorar:</p>
+                <h1>As Crônicas de Wilkner</h1>
+                <p class="subtitle">
+                    Bem-vindo ao meu blog pessoal de viagens! Aqui partilho as minhas histórias, sentimentos e perrengues pelo mundo. 
+                    Para tornar a sua experiência única, o meu <strong>Gêmeo Digital de IA</strong> está à disposição para adaptar cada relato ao SEU formato de consumo favorito: leia a crônica detalhada ou consuma num roteiro dinâmico estilo Stories do Instagram. Escolha como quer viajar comigo!
+                </p>
+            </div>
+
+            <div class="filters-section" style="margin: 20px 0 30px 0; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
+                <span class="filter-label">Filtrar por destino:</span>
+                <div id="destinations-filters" class="filters-container">
+                    <button class="filter-btn active" data-destination="all">Todos</button>
+                </div>
             </div>
 
             <div class="stories-showcase">
                 <h2 class="section-title">Histórias Disponíveis na Mala 🧳</h2>
                 <div id="tripsGrid" class="trips-grid">
-                    <!-- Carregado Dinamicamente -->
                     <p style="color: var(--text-muted); text-align: center; width: 100%;">Aguardando carregar histórias...</p>
                 </div>
             </div>
         </div>
 
-        <!-- Carregamento (Loading) -->
-        <div id="loadingStatus" class="loading">🧠⚡ O Gêmeo Digital está montando essa recordação...</div>
-
-        <!-- FLUXO DE CONSUMO: Exibição de Stories ou Artigo -->
-        <div id="viewSection" class="view-section">
-            <div class="back-nav" onclick="goBackToPortal()">↩️ Escolher outra história</div>
-            
-            <!-- Output dos Stories -->
-            <div id="storiesContainer" class="stories-container" style="display: none;"></div>
-            
-            <!-- Output do Artigo -->
-            <div id="articleContainer" style="display: none;"></div>
-        </div>
-
-        <!-- MODAL: Escolha de Formato -->
         <div id="formatModal" class="modal-overlay">
             <div class="modal">
                 <button class="close-btn" onclick="closeModal()">×</button>
@@ -321,38 +395,108 @@
             </div>
         </div>
 
+        <div id="loadingStatus" class="loading">Carregando com o Gêmeo Digital... ✈️</div>
+
+        <div id="viewSection" class="view-section">
+            <a class="back-nav" onclick="goBackToPortal()">← Voltar ao Portal</a>
+            <div id="storiesContainer" class="stories-container"></div>
+            <div id="articleContainer"></div>
+        </div>
+
     </div>
 
     <script>
-        const API_BASE = "https://gemeo-digital-viagem.onrender.com/api/v1";
+        // Detecção Dinâmica da API (Local vs Cloud Render)
+        const API_BASE = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+            ? "http://127.0.0.1:8000/api/v1"
+            : "https://gemeo-digital-viagem.onrender.com/api/v1";
+
         let selectedTripId = null;
+        let allTrips = []; 
 
-        // Ao carregar a página, busca as histórias disponíveis
-        document.addEventListener("DOMContentLoaded", carregarHistorias);
+        document.addEventListener("DOMContentLoaded", loadBlog);
 
-        async function carregarHistorias() {
+        async function loadBlog() {
             try {
                 const response = await fetch(`${API_BASE}/trips`);
-                const trips = await response.json();
-                const grid = document.getElementById("tripsGrid");
+                allTrips = await response.json();
                 
-                if (trips.length === 0) {
-                    grid.innerHTML = `<p style="color: var(--text-muted); text-align: center; width: 100%;">Nenhuma história na pasta de mídias ainda.</p>`;
-                    return;
-                }
-                
-                grid.innerHTML = "";
-                trips.forEach(trip => {
-                    grid.innerHTML += `
-                        <div class="trip-card" onclick="abrirEscolhaFormato('${trip.trip_id}')">
-                            <h3>${trip.display_title}</h3>
-                            <div class="card-action">Explorar memórias ➜</div>
-                        </div>
-                    `;
-                });
+                generateFilterButtons(allTrips);
+                renderTripsGrid(allTrips);
             } catch (error) {
-                console.error("Erro ao carregar histórias:", error);
+                console.error("Erro ao carregar viagens do blog:", error);
+                const grid = document.getElementById("tripsGrid");
+                grid.innerHTML = `<p style="color: #ff6b6b; text-align: center; width: 100%;">Falha ao conectar com o servidor.</p>`;
             }
+        }
+
+        function generateFilterButtons(trips) {
+            const filtersContainer = document.getElementById("destinations-filters");
+            const destinations = ["all", ...new Set(trips.map(t => t.destination).filter(Boolean))];
+            
+            filtersContainer.innerHTML = "";
+            
+            destinations.forEach(dest => {
+                const btn = document.createElement("button");
+                btn.classList.add("filter-btn");
+                if (dest === "all") btn.classList.add("active");
+                
+                btn.textContent = dest === "all" ? "Todos" : dest;
+                btn.setAttribute("data-destination", dest);
+                
+                btn.addEventListener("click", () => {
+                    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+                    btn.classList.add("active");
+                    filterTrips(dest);
+                });
+                
+                filtersContainer.appendChild(btn);
+            });
+        }
+
+        function filterTrips(destination) {
+            if (destination === "all") {
+                renderTripsGrid(allTrips);
+            } else {
+                const filtered = allTrips.filter(t => t.destination === destination);
+                renderTripsGrid(filtered);
+            }
+        }
+
+        function renderTripsGrid(trips) {
+            const grid = document.getElementById("tripsGrid");
+            grid.innerHTML = "";
+            
+            if (trips.length === 0) {
+                grid.innerHTML = `<p style="color: var(--text-muted); text-align: center; width: 100%;">Nenhuma história encontrada.</p>`;
+                return;
+            }
+            
+            trips.forEach(trip => {
+                const dateParts = (trip.date || "").split("-");
+                const formattedDate = dateParts.length === 3 ? `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}` : "Sem data";
+                
+                const card = document.createElement("div");
+                card.classList.add("trip-card");
+                card.addEventListener("click", () => abrirEscolhaFormato(trip.trip_id));
+                
+                card.innerHTML = `
+                    <img class="trip-card-image" src="assets/images/${trip.trip_id}.jpg" alt="${trip.display_title}" onerror="this.src='https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=500'">
+                    <div class="trip-card-content">
+                        <div>
+                            <div class="trip-meta">
+                                <span class="meta-date">📅 ${formattedDate}</span>
+                                <span class="meta-tag">📍 ${trip.destination || "Geral"}</span>
+                            </div>
+                            <h3>${trip.display_title}</h3>
+                            <p class="trip-card-preview">Clique para pedir ao Gêmeo Digital para preparar as memórias nesse formato.</p>
+                        </div>
+                        <button class="read-btn">Explorar Relato ➜</button>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
         }
 
         function abrirEscolhaFormato(tripId) {
@@ -373,17 +517,14 @@
             const storiesDiv = document.getElementById("storiesContainer");
             const articleDiv = document.getElementById("articleContainer");
 
-            // Oculta portal e exibe carregamento
             portal.style.display = "none";
             view.style.display = "none";
             loading.style.display = "block";
 
             try {
-                // Requisição dinâmica baseada no arquivo estático da pasta 'trips'
                 const response = await fetch(`${API_BASE}/trips/${selectedTripId}/output?format=${format}&mode=coauthor`);
                 const data = await response.json();
                 
-                // Oculta loading e exibe área de visualização
                 loading.style.display = "none";
                 view.style.display = "block";
 
@@ -406,7 +547,6 @@
             const container = document.getElementById('storiesContainer');
             container.innerHTML = "";
             
-            // Adiciona o Alerta de Transparência de IA no topo dos Stories
             let transparencyAlert = `
                 <div style="grid-column: 1 / -1; background: rgba(138, 43, 226, 0.1); border: 1px solid var(--primary); padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; line-height: 1.5; color: #ccc;">
                     🤖 <b>Nota de Transparência:</b> Os dados apresentados nesta sequência são originários do relato real do Wilkner. A Inteligência Artificial realizou as compilações e adaptações de roteiro, sugestões visuais e trilhas sonoras com base na <b>Persona Digital</b> configurada pelo Wilkner.
@@ -436,11 +576,8 @@
 
         function renderArticle(data) {
             const container = document.getElementById('articleContainer');
-            
-            // Pega o conteúdo do markdown garantindo que ele exista (seja em .content_markdown ou .content)
             const markdownText = data.content_markdown || data.content || "";
             
-            // Só chama o marked se de fato houver texto para renderizar
             let parsedMarkdown = "";
             if (markdownText) {
                 parsedMarkdown = marked.parse(markdownText);
