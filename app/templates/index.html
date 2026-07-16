@@ -436,7 +436,17 @@
 
         function renderArticle(data) {
             const container = document.getElementById('articleContainer');
-            const parsedMarkdown = marked.parse(data.content_markdown);
+            
+            // Pega o conteúdo do markdown garantindo que ele exista (seja em .content_markdown ou .content)
+            const markdownText = data.content_markdown || data.content || "";
+            
+            // Só chama o marked se de fato houver texto para renderizar
+            let parsedMarkdown = "";
+            if (markdownText) {
+                parsedMarkdown = marked.parse(markdownText);
+            } else {
+                parsedMarkdown = "<p style='color: var(--text-muted);'>Nenhum conteúdo de texto encontrado para esta história.</p>";
+            }
             
             container.innerHTML = `
                 <div class="article-view">
@@ -445,10 +455,10 @@
                     </div>
 
                     <div class="article-header">
-                        <h1 class="article-title">${data.title}</h1>
-                        <p class="article-subtitle">${data.subtitle}</p>
+                        <h1 class="article-title">${data.title || "Sem Título"}</h1>
+                        <p class="article-subtitle">${data.subtitle || ""}</p>
                         <div class="article-meta">
-                            ⏱️ TEMPO ESTIMADO DE LEITURA: ${data.suggested_reading_time_minutes} MIN
+                            ⏱️ TEMPO ESTIMADO DE LEITURA: ${data.suggested_reading_time_minutes || 5} MIN
                         </div>
                     </div>
                     <div class="article-body">
