@@ -67,73 +67,28 @@ def list_available_trips():
     return trips
 
 
-@router.get(
-    "/trips/{trip_id}/output", 
-    response_model=Union[TripStoriesOutputSchema, TripArticleOutputSchema]
-)
-def get_trip_output(
-    trip_id: str, 
-    format: str = Query("stories", description="Formato de saída desejado: 'stories' ou 'article'"),
-    mode: str = Query("coauthor", description="Modo do Gêmeo Digital: 'coauthor' ou 'ghostwriter'")
-):
-    """
-    Busca o relato bruto diretamente do arquivo estático no GitHub/Local e ativa o Gêmeo Digital.
-    """
-    # 1. Tenta ler o arquivo de texto na pasta 'trips'
+@router.get("/trips/{trip_id}/output")
+def get_trip_output(trip_id: str, format: str):
+    # Garante que o arquivo solicitado existe
     file_path = TRIPS_DIR / f"{trip_id}.txt"
     
     if not file_path.exists():
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, 
-            detail=f"A história '{trip_id}' não foi encontrada na pasta do projeto."
+            status_code=404, 
+            detail=f"Crônica '{trip_id}' não encontrada no servidor."
         )
         
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            raw_text = f.read()
+        # Lê o arquivo forçando o padrão universal UTF-8
+        with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+            content = f.read()
     except Exception as e:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erro ao ler o arquivo físico da viagem: {str(e)}"
+            status_code=500, 
+            detail=f"Erro ao ler o arquivo de crônica: {str(e)}"
         )
-    
-    # 2. Carrega a Persona do arquivo JSON (Camada 1)
-    try:
-        persona = PersonaService.get_core_profile()
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
-            detail=f"Erro ao carregar persona: {str(e)}"
-        )
-        
-    # 3. Executa o Agente Adaptador de Formato correto (Camada 3)
-    if format == "stories":
-        try:
-            return StoriesAgent.generate_stories(raw_text=raw_text, persona=persona, trip_id=trip_id)
-        except Exception as e:
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"Erro ao gerar Stories com o Gêmeo Digital: {str(e)}"
-            )
-            
-    elif format == "article":
-        try:
-            return ArticleAgent.generate_article(
-                raw_text=raw_text, 
-                persona=persona, 
-                trip_id=trip_id, 
-                mode=mode
-            )
-        except Exception as e:
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"Erro ao gerar Artigo no modo {mode}: {str(e)}"
-            )
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Formato inválido. Escolha 'stories' ou 'article'."
-        )
+
+    # Aqui continua a lógica de geração ou leitura do seu JSON...
 
 @router.post("/media/extract", status_code=status.HTTP_200_OK)
 async def extract_media_metadata(file: UploadFile = File(...)):
